@@ -7,7 +7,7 @@
 		Use the ARProxy class to make use of the AR Worker.
 	*/
     var makeARWorker = function () {
-        var worker = new Worker('../src/artoolkit.worker.js');
+        var worker = new Worker('./src/artoolkit.worker.js');
         worker.callID = 0;
         worker.callbacks = {};
         worker.listeners = {};
