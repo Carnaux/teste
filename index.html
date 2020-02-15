@@ -44,7 +44,7 @@
             window.ARThreeOnLoad = function () {
 
                 ARController.getUserMediaThreeScene({
-                    maxARVideoSize: 1280, cameraParam: '../src/camera/camera_para.dat',
+                    maxARVideoSize: 1280, cameraParam: './src/camera/camera_para.dat',
                     onSuccess: function (arScene, arController, arCamera) {
 
                         var proxy = new ARProxy(arController, '../src/camera/camera_para.dat', function () { console.log("got new", arguments); });
