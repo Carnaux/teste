@@ -146,71 +146,90 @@
         ////////////////////////////////////////////////////////////////////////////////
         //          Create a ArMarkerControls
         ////////////////////////////////////////////////////////////////////////////////
+        scene.visible = false;
+
+        var root = new THREE.Group();
+        scene.add(root);
 
         // init controls for camera
-        var markerControls = new THREEx.ArMarkerControls(arToolkitContext, camera, {
+        var markerControls = new THREEx.ArMarkerControls(arToolkitContext, root, {
             type : 'nft',
-            descriptorsUrl : './src/pinball',
-            changeMatrixMode: 'cameraTransformMatrix'
+            descriptorsUrl : './src/markers/second',
+            changeMatrixMode: 'modelViewMatrix' // Use
         })
+        
+        var geometry = new THREE.BoxGeometry(100, 100, 100);
+		var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		var cube = new THREE.Mesh( geometry, material );
+        root.add(cube)
 
-        scene.visible = false
 
-        var root = new THREE.Object3D();
-        scene.add(root);
+        var root2 = new THREE.Group();
+        scene.add(root2);
+
+        // init controls for camera
+        var markerControls2 = new THREEx.ArMarkerControls(arToolkitContext, root2, {
+            type : 'nft',
+            descriptorsUrl : './src/markers/pinball',
+            changeMatrixMode: 'modelViewMatrix' // Use
+        })
+        
+        var geometry2 = new THREE.BoxGeometry(100, 100, 100);
+		var material2 = new THREE.MeshBasicMaterial( { color: new THREE.Color("rgb(255,0,0)") } );
+		var cube2 = new THREE.Mesh( geometry2, material2 );
+        root2.add(cube2)
+
 
         //////////////////////////////////////////////////////////////////////////////////
         //		add an object in the scene
         //////////////////////////////////////////////////////////////////////////////////
 
-        var threeGLTFLoader = new THREE.GLTFLoader();
-        var model;
+        // var threeGLTFLoader = new THREE.GLTFLoader();
+        // var model;
 
-        threeGLTFLoader.load("./Flamingo.glb", function (gltf) {
-            model = gltf.scene.children[0];
-            model.name = 'Flamingo';
+        // threeGLTFLoader.load("./Flamingo.glb", function (gltf) {
+        //     model = gltf.scene.children[0];
+        //     model.name = 'Flamingo';
 
-            var animation = gltf.animations[0];
-            var mixer = new THREE.AnimationMixer(model);
-            mixers.push(mixer);
-            var action = mixer.clipAction(animation);
-            action.play();
+        //     var animation = gltf.animations[0];
+        //     var mixer = new THREE.AnimationMixer(model);
+        //     mixers.push(mixer);
+        //     var action = mixer.clipAction(animation);
+        //     action.play();
 
-            root.matrixAutoUpdate = false;
-            root.add(model);
+        //     root.matrixAutoUpdate = false;
+        //     root.add(model);
 
-            model.position.z = 0;
-            model.position.x = 100;
-            model.position.y = 100;
+        //     model.position.z = 0;
+        //     model.position.x = 100;
+        //     model.position.y = 100;
+
+        //     animate();
+        // }  
+        // );
 
 
-            //////////////////////////////////////////////////////////////////////////////////
-            //		render the whole thing on the page
-            //////////////////////////////////////////////////////////////////////////////////
+    function animate() {
+        requestAnimationFrame(animate);
 
-            var animate = function() {
-                requestAnimationFrame(animate);
-
-                if (mixers.length > 0) {
-                    for (var i = 0; i < mixers.length; i++) {
-                        mixers[i].update(clock.getDelta());
-                    }
-                }
-
-                if (!arToolkitSource.ready) {
-                    return;
-                }
-
-                arToolkitContext.update( arToolkitSource.domElement )
-
-                // update scene.visible if the marker is seen
-                scene.visible = camera.visible;
-
-                renderer.render(scene, camera);
-            };
-
-            requestAnimationFrame(animate);
+        if (mixers.length > 0) {
+            for (var i = 0; i < mixers.length; i++) {
+                mixers[i].update(clock.getDelta());
+            }
         }
-    );
+
+        if (!arToolkitSource.ready) {
+            return;
+        }
+
+        arToolkitContext.update( arToolkitSource.domElement )
+        // console.log(root.visible)
+        // update scene.visible if the marker is seen
+        scene.visible = camera.visible;
+
+        renderer.render(scene, camera);
+    };
+
+    animate();
     </script>
 </body>
